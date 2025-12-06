@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8 Puzzle Game</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 80px);
+            grid-template-rows: repeat(3, 80px);
+            gap: 5px;
+            margin: 20px auto;
+            width: 260px;
+        }
+        .tile {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            border: 2px solid black;
+            cursor: pointer;
+        }
+        .empty {
+            background-color: white;
+            cursor: default;
+        }
+    </style>
+</head>
+<body>
+    <h2>8 Puzzle Game</h2>
+    <div class="grid" id="grid"></div>
+    <button onclick="shuffle()">Shuffle</button>
+    
+    <script>
+        let grid = document.getElementById("grid");
+        let tiles = [
+            [1, 2, 3],
+            [8, 4, 0],
+            [7, 6, 5]
+        ];
+
+        function render() {
+            grid.innerHTML = "";
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    let tile = document.createElement("div");
+                    tile.classList.add("tile");
+                    if (tiles[i][j] === 0) {
+                        tile.classList.add("empty");
+                        tile.textContent = "";
+                    } else {
+                        tile.textContent = tiles[i][j];
+                        tile.onclick = () => moveTile(i, j);
+                    }
+                    grid.appendChild(tile);
+                }
+            }
+        }
+
+        function moveTile(i, j) {
+            let directions = [
+                [0, 1], [0, -1], [1, 0], [-1, 0]
+            ];
+            for (let [di, dj] of directions) {
+                let ni = i + di, nj = j + dj;
+                if (ni >= 0 && ni < 3 && nj >= 0 && nj < 3 && tiles[ni][nj] === 0) {
+                    [tiles[i][j], tiles[ni][nj]] = [tiles[ni][nj], tiles[i][j]];
+                    render();
+                    return;
+                }
+            }
+        }
+
+        function shuffle() {
+            for (let i = 0; i < 100; i++) {
+                let i1 = Math.floor(Math.random() * 3);
+                let j1 = Math.floor(Math.random() * 3);
+                let i2 = Math.floor(Math.random() * 3);
+                let j2 = Math.floor(Math.random() * 3);
+                [tiles[i1][j1], tiles[i2][j2]] = [tiles[i2][j2], tiles[i1][j1]];
+            }
+            render();
+        }
+
+        render();
+    </script>
+</body>
+</html>`
